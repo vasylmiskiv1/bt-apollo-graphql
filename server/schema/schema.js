@@ -50,7 +50,7 @@ const RootQuery = new GraphQLObjectType({
       type: ProjectType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return Project.find(args.id);
+        return Project.findById(args.id);
       },
     },
     clients: {
@@ -136,7 +136,7 @@ const mutation = new GraphQLObjectType({
         return Project.findByIdAndRemove(args.id)
       }
     },
-    uodateProject: {
+    updateProject: {
       type: ProjectType,
       args: {
         id: { type: new GraphQLNonNull(GraphQLID) },
