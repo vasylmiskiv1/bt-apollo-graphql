@@ -1,4 +1,4 @@
-import React from 'react';
+import GraphQLLogo from '../assets/graphql.svg';
 
 export default function Header() {
   return (
@@ -6,7 +6,8 @@ export default function Header() {
       <div className='container'>
         <a className="navbar-brand" href="/">
           <div className='d-flex'>
-            Project management
+          <img src={GraphQLLogo} alt="graphql" style={{height: '23px', marginTop: '5px'}} />
+            GraphQL Project management
           </div>
         </a>
       </div>
