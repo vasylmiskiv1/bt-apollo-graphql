@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { FaList, FaListAlt } from "react-icons/fa";
+import { FaList } from "react-icons/fa";
 import { useMutation, useQuery } from "@apollo/client";
+
+import { ADD_PROJECT } from "../mutations/projectMutations";
 import { GET_PROJECTS } from "../queries/projectQueries";
 import { GET_CLIENTS } from "../queries/clientQueries";
-import Spinner from "./Spinner";
+import { projectStatusList } from "../consts/projectStatus";
 
 export default function AddProjectModal() {
   const [name, setName] = useState("");
@@ -11,13 +13,32 @@ export default function AddProjectModal() {
   const [clientId, setClientId] = useState("");
   const [status, setStatus] = useState("new");
 
+  const [addProject] = useMutation(ADD_PROJECT, {
+    variables: {
+      name,
+      description,
+      clientId,
+      status,
+    },
+    update(cache, { data: { addProject } }) {
+      const { projects } = cache.readQuery({ query: GET_PROJECTS });
+      cache.writeQuery({
+        query: GET_PROJECTS,
+        data: { projects: [...projects, addProject] },
+      });
+    },
+  });
+
   const { loading, error, data } = useQuery(GET_CLIENTS);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (name === "" || description === "" || status === "") {
+
+    if (name === "" || description === "" || status === "" || clientId === "") {
       return alert("Should fill in all fields");
     }
+
+    addProject(name, description, clientId, status);
 
     setName("");
     setDescription("");
@@ -92,9 +113,9 @@ export default function AddProjectModal() {
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                       >
-                        <option value="new">Not Started</option>
-                        <option value="new">In Progress</option>
-                        <option value="new">Completed</option>
+                        {projectStatusList.map((status, i) => (
+                          <option key={i} value={status.value}>{status.text}</option>
+                        ))}
                       </select>
                     </div>
 
@@ -107,7 +128,7 @@ export default function AddProjectModal() {
                         onChange={(e) => setClientId(e.target.value)}
                       >
                         <option value="">Select Client</option>
-                        { data.clients.map((client) => (
+                        {data.clients.map((client) => (
                           <option key={client.id} value={client.id}>
                             {client.name}
                           </option>
