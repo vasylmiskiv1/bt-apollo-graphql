@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_PROJECT } from "../mutations/projectMutations";
 import { GET_PROJECTS } from "../queries/projectQueries";
 import { GET_CLIENTS } from "../queries/clientQueries";
+import { projectStatusList } from "../consts/projectStatus";
 
 export default function AddProjectModal() {
   const [name, setName] = useState("");
@@ -33,7 +34,7 @@ export default function AddProjectModal() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (name === "" || description === "" || status === "") {
+    if (name === "" || description === "" || status === "" || clientId === "") {
       return alert("Should fill in all fields");
     }
 
@@ -112,9 +113,9 @@ export default function AddProjectModal() {
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                       >
-                        <option value="new">Not Started</option>
-                        <option value="progress">In Progress</option>
-                        <option value="completed">Completed</option>
+                        {projectStatusList.map((status, i) => (
+                          <option key={i} value={status.value}>{status.text}</option>
+                        ))}
                       </select>
                     </div>
 

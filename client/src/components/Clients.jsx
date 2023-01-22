@@ -12,7 +12,7 @@ export default function Clients() {
 
   return (
     <>
-      {!loading && !error && (
+      {!loading && !error && data.clients.length ? (
         <table className="table table-hover mt-3">
           <thead>
             <tr>
@@ -27,7 +27,7 @@ export default function Clients() {
             ))}
           </tbody>
         </table>
-      )}
+      ) : <h5 className="text-center mt-5">No clients found</h5>}
     </>
   );
 }
