@@ -1,4 +1,3 @@
-// Projects
 const projects = [
     {
       id: '1',
@@ -42,7 +41,6 @@ const projects = [
     },
   ];
   
-  // Clients
   const clients = [
     {
       id: '1',
